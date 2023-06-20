@@ -24,7 +24,7 @@ sa = gspread.service_account(filename)
 
 sheet = 'RQ EP-005-000 (Romaneios)'
 #worksheet= input('Nome da aba:')
-worksheet = 'FT10500 SS T BB M23' # Local para fazer alteração do nome da planilha
+worksheet = 'Python' # Local para fazer alteração do nome da planilha
 
 sh1 = sa.open(sheet)
 wks1 = sh1.worksheet(worksheet)
