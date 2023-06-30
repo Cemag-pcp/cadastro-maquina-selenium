@@ -17,9 +17,9 @@ import datetime
 scope = ['https://www.googleapis.com/auth/spreadsheets',
             "https://www.googleapis.com/auth/drive"]
 
-credentials = ServiceAccountCredentials.from_json_keyfile_name("service_account_cemag.json", scope)
+credentials = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
 client = gspread.authorize(credentials)
-filename = 'service_account_cemag.json'
+filename = 'service_account.json'
 sa = gspread.service_account(filename)
 
 sheet = 'RQ EP-005-000 (Romaneios)'
@@ -174,6 +174,9 @@ codigo_tabela.reset_index(inplace=True,drop=True)
 codigo_tabela = codigo_tabela[codigo_tabela[14].str.contains('ACESS')].reset_index(drop=True)
 codigo_tabela = codigo_tabela[~codigo_tabela[15].str.contains('Código')].reset_index(drop=True)
 
+
+
+
 # planilha = tabela.iloc[22:, 14:21]
 # cabecalho = wks1.row_values(9)
 # cabecalho = cabecalho[14:21]
@@ -200,21 +203,21 @@ for i in range(len(codigo_tabela)):
         var -= 1
         linha -= 2
 
-    time.sleep(2)
+    time.sleep(5)
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[2]').click()
-    time.sleep(3)
+    time.sleep(5)
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[2]/div/input').send_keys(codigo_tabela[17][i])
-    time.sleep(2)
+    time.sleep(5)
 
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[3]').click()
-    time.sleep(2)
+    time.sleep(5)
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[3]/div/input').send_keys(codigo_tabela[15][i])
-    time.sleep(2)
+    time.sleep(5)
     
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[5]').click()
-    time.sleep(2)
+    time.sleep(5)
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[5]/div/input').send_keys(codigo_tabela[20][i])
-    time.sleep(2)
+    time.sleep(5)
     
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[7]').click()
     time.sleep(5)
@@ -226,15 +229,15 @@ for i in range(len(codigo_tabela)):
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[9]/div/input').send_keys(Keys.TAB)
     time.sleep(5)
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[10]/div/input').send_keys(Keys.TAB)
-    time.sleep(2)
+    time.sleep(5)
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[11]/div/input').send_keys(Keys.TAB)
 
-    time.sleep(2)
+    time.sleep(5)
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[13]/div/textarea').send_keys(codigo_tabela[19][i])
-    time.sleep(2)
+    time.sleep(5)
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[2]').click()
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[2]').click()
-    time.sleep(2)
+    time.sleep(5)
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[2]/div/input').send_keys(Keys.CONTROL + 'm')
     time.sleep(6)
 
