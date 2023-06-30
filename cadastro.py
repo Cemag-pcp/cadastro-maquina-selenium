@@ -64,7 +64,7 @@ def listar(nav, classe):
 
     return(lista_menu, test_lista)
 
-nav = webdriver.Chrome(r'C:\\Users\\TI\\anaconda3\\lib\\site-packages\\chromedriver_autoinstaller\\114\\chromedriver.exe')
+nav = webdriver.Chrome()
 time.sleep(1)
 nav.maximize_window()
 time.sleep(1)
@@ -113,8 +113,18 @@ nav.find_element(By.XPATH, '/html/body/table/tbody/tr[2]/td/div/form/table/thead
 time.sleep(2)
 
 #-------------------------------------------------------------------------------------------
-codigo_tabela = tabela.iloc[22,14]
-codigo_tabela = codigo_tabela[0:6]
+codigo_tabela = tabela.iloc[9:,14:].reset_index(drop=True)
+
+for i in range(len(codigo_tabela)):
+    if codigo_tabela[14][i] == '' or codigo_tabela[14][i] == None:
+        codigo_tabela[14][i] = codigo_tabela[14][i-1]
+
+codigo_tabela.dropna(inplace=True)
+codigo_tabela.reset_index(inplace=True,drop=True)
+
+codigo_tabela = codigo_tabela[codigo_tabela[14].str.contains('ACESS')].reset_index(drop=True)
+codigo_tabela = codigo_tabela[14][0][0:6]
+
 nome_generico = tabela.iloc[7,16]
 
 codigo_inov = nav.find_element(By.XPATH, '//*[@id="explorer"]/tbody/tr[1]/td[1]/table/tbody/tr[2]/td/table/tbody/tr[3]/td[2]/table/tbody/tr/td[1]/input')
@@ -152,27 +162,39 @@ nav.find_element(By.XPATH,'/html/body/table/tbody/tr[2]/td/div/form/table/tbody/
 time.sleep(1.5)
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-planilha = tabela.iloc[22:, 14:21]
-cabecalho = wks1.row_values(9)
-cabecalho = cabecalho[14:21]
-planilha = planilha.set_axis(cabecalho,axis=1)
+codigo_tabela = tabela.iloc[9:,14:].reset_index(drop=True)
 
-indice_linha_descricao = planilha[planilha['Descrição'] == 'Descrição'].index[0]
+for i in range(len(codigo_tabela)):
+    if codigo_tabela[14][i] == '' or codigo_tabela[14][i] == None:
+        codigo_tabela[14][i] = codigo_tabela[14][i-1]
 
-planilha = planilha.loc[:indice_linha_descricao - 1]
+codigo_tabela.dropna(inplace=True)
+codigo_tabela.reset_index(inplace=True,drop=True)
 
-planilha.fillna('',inplace=True)
+codigo_tabela = codigo_tabela[codigo_tabela[14].str.contains('ACESS')].reset_index(drop=True)
+codigo_tabela = codigo_tabela[~codigo_tabela[15].str.contains('Código')].reset_index(drop=True)
 
-planilha = planilha[(planilha['Código'] != '')]
+# planilha = tabela.iloc[22:, 14:21]
+# cabecalho = wks1.row_values(9)
+# cabecalho = cabecalho[14:21]
+# planilha = planilha.set_axis(cabecalho,axis=1)
 
-planilha.reset_index(drop=True,inplace=True)
+# indice_linha_descricao = planilha[planilha['Descrição'] == 'Descrição'].index[0]
+
+# planilha = planilha.loc[:indice_linha_descricao - 1]
+
+# planilha.fillna('',inplace=True)
+
+# planilha = planilha[(planilha['Código'] != '')]
+
+# planilha.reset_index(drop=True,inplace=True)
 # ----------------------------------------------------------------------------------------------------------------------
 nav.find_element(By.XPATH,'/html/body/table/tbody/tr[2]/td/div/form/table/tbody/tr[1]/td[1]/table/tbody/tr[15]/td/table/tbody/tr/td[1]/table/tbody/tr/td[1]/div/table/tbody/tr[1]/td[1]/table/tbody/tr[15]/td/table/tbody/tr/td[1]/table/tbody/tr/td[1]/div/table/thead/tr[1]/td[1]/table/tbody/tr/td[2]/table/tbody/tr/td[2]/div').click()
 time.sleep(1.5)
 linha = 3
 var = 0
 
-for i in range(len(planilha)):
+for i in range(len(codigo_tabela)):
 
     if var == 10 and linha == 23:
         var -= 1
@@ -180,43 +202,43 @@ for i in range(len(planilha)):
 
     time.sleep(2)
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[2]').click()
-    time.sleep(1.5)
-    nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[2]/div/input').send_keys(planilha['Ordem'][i])
-    time.sleep(1.5)
+    time.sleep(3)
+    nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[2]/div/input').send_keys(codigo_tabela[17][i])
+    time.sleep(2)
 
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[3]').click()
-    time.sleep(1.5)
-    nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[3]/div/input').send_keys(planilha['Código'][i])
-    time.sleep(1.5)
+    time.sleep(2)
+    nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[3]/div/input').send_keys(codigo_tabela[15][i])
+    time.sleep(2)
     
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[5]').click()
-    time.sleep(1.5)
-    nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[5]/div/input').send_keys(planilha['SUM de Qtd'][i])
-    time.sleep(1.5)
+    time.sleep(2)
+    nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[5]/div/input').send_keys(codigo_tabela[20][i])
+    time.sleep(2)
     
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[7]').click()
-    time.sleep(1.5)
-    nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[7]/div/input').send_keys(planilha['Depósito'][i])
-    time.sleep(3)
+    time.sleep(5)
+    nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[7]/div/input').send_keys(codigo_tabela[18][i])
+    time.sleep(5)
 
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[7]/div/input').send_keys(Keys.TAB)
-    time.sleep(1)
+    time.sleep(5)
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[9]/div/input').send_keys(Keys.TAB)
-    time.sleep(1)
+    time.sleep(5)
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[10]/div/input').send_keys(Keys.TAB)
-    time.sleep(1)
+    time.sleep(2)
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[11]/div/input').send_keys(Keys.TAB)
 
-    time.sleep(1.5)
-    nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[13]/div/textarea').send_keys(planilha['Observação'][i])
-    time.sleep(1.5)
+    time.sleep(2)
+    nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[13]/div/textarea').send_keys(codigo_tabela[19][i])
+    time.sleep(2)
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[2]').click()
     nav.find_element(By.XPATH,'//*[@id="explorer_RECURSOETAPA_ETAPARECURSOS"]/tbody/tr[1]/td[1]/table/tbody/tr['+ str(linha) +']/td[2]').click()
-    time.sleep(1.5)
+    time.sleep(2)
     nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[2]/div/input').send_keys(Keys.CONTROL + 'm')
     time.sleep(6)
 
-    if i+1 == planilha.shape[0]:
+    if i+1 == codigo_tabela.shape[0]:
         pass
     else:
         nav.find_element(By.XPATH,'//*[@id='+ str(var) +']/td[2]/div/input').send_keys(Keys.INSERT)
